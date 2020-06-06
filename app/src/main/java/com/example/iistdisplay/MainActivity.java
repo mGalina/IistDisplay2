@@ -2,6 +2,7 @@ package com.example.iistdisplay;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,13 +21,17 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String ATTRIBUTE_NAME_TITLE = "title";
     private static final String ATTRIBUTE_NAME_SUBTITLE = "subtitle";
+    private static final String CONTENT_KEY = "values";
 
-    List<Map<String, String>> simpleAdapterContent = new ArrayList<>();
+    private List<Map<String, String>> simpleAdapterContent = new ArrayList<>();
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        preferences = getSharedPreferences(CONTENT_KEY, MODE_PRIVATE);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,43 +71,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareContent() {
-        try {
-            prepareContentFromPrefs();
-        } catch (Exception e) {
-            e.printStackTrace();
-            prepareContentFromAssets();
-            SharedPreferences preferences = getSharedPreferences("values", MODE_PRIVATE);
-            preferences.edit().putString("values", getString(R.string.large_text)).apply();
+        if (!preferences.contains(CONTENT_KEY)) {
+            preferences.edit().putString(CONTENT_KEY, getString(R.string.large_text)).apply();
         }
+
+        String savedStr = preferences.getString(CONTENT_KEY, "");
+
+        fillAdapterContent(savedStr);
     }
 
-    private void prepareContentFromPrefs() throws Exception {
-        SharedPreferences preferences = getSharedPreferences("values", MODE_PRIVATE);
-        String savedStr = preferences.getString("values", "");
-
-        String[] strings;
-        if (!savedStr.isEmpty()) {
-            strings = savedStr.split("\n\n");
-        } else {
-            throw new Exception("SharedPreferences has no values");
-        }
-
+    private void fillAdapterContent(String content) {
+        String[] strings = content.split("\n\n");
         for (String str : strings) {
             Map<String, String> map = new HashMap<>();
             map.put(ATTRIBUTE_NAME_TITLE, str.length() + "");
             map.put(ATTRIBUTE_NAME_SUBTITLE, str);
             simpleAdapterContent.add(map);
-        }
-    }
-
-    private void prepareContentFromAssets() {
-        String[] strings = getString(R.string.large_text).split("\n\n");
-        for (String str : strings) {
-            Map<String, String> map = new HashMap<>();
-            map.put(ATTRIBUTE_NAME_TITLE, str.length() + "");
-            map.put(ATTRIBUTE_NAME_SUBTITLE, str);
-            simpleAdapterContent.add(map);
-            prepareContent();
         }
     }
 }
