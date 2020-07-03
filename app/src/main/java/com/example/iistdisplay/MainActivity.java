@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CONTENT_KEY = "values";
 
     private static final String ITEMS_DELTED_KEY = "ITEMS_DELETED";
-    private static final String LOG_TAG = "Log612";
+    private static final String LOG_TAG = "Log";
 
 
     private List<Map<String, String>> simpleAdapterContent = new ArrayList<>();
