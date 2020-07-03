@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String ATTRIBUTE_NAME_SUBTITLE = "subtitle";
     private static final String CONTENT_KEY = "values";
 
-    private static final String ITEMS_DELTED_KEY = "ITEMS_DELETED";
+    private static final String ITEMS_DELETE_KEY = "ITEMS_DELETED";
     private static final String LOG_TAG = "Log";
 
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             Log.d(LOG_TAG, getString(R.string.bundle));
-            deletedItems = savedInstanceState.getIntegerArrayList(ITEMS_DELTED_KEY);
+            deletedItems = savedInstanceState.getIntegerArrayList(ITEMS_DELETE_KEY);
             assert deletedItems != null;
             for (int v : deletedItems) {
                 simpleAdapterContent.remove(v);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putIntegerArrayList(ITEMS_DELTED_KEY, deletedItems);
+        outState.putIntegerArrayList(ITEMS_DELETE_KEY, deletedItems);
         super.onSaveInstanceState(outState);
         Log.d(LOG_TAG, getString(R.string.onSaveInstanceState));
     }
