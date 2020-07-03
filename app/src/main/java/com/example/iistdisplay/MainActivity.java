@@ -49,15 +49,27 @@ public class MainActivity extends AppCompatActivity {
         prepareContent();
 
         if (savedInstanceState != null) {
-            Log.d(LOG_TAG, getString(R.string.bundle));
             deletedItems = savedInstanceState.getIntegerArrayList(ITEMS_DELETE_KEY);
             assert deletedItems != null;
             for (int v : deletedItems) {
                 simpleAdapterContent.remove(v);
             }
         } else {
-            Log.d(LOG_TAG, getString(R.string.bundle));
+            Log.d(LOG_TAG, "Bundle is not null");
         }
+
+//        private void restoreDeletedItems(@NonNull Bundle bundle) {
+//            Log.d(LOG_TAG, "Bundle is not null");
+//            final ArrayList<Integer> savedDeletedItems = bundle.getIntegerArrayList(ITEMS_DELETE_KEY);
+//            if (savedDeletedItems == null) {
+//                return;
+//            }
+//
+//            deletedItems = savedDeletedItems;
+//            for (int index : deletedItems) {
+//                simpleAdapterContent.remove(index);
+//            }
+//        }
 
         final BaseAdapter listContentAdapter = createAdapter(simpleAdapterContent);
         list.setAdapter(listContentAdapter);
@@ -114,6 +126,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putIntegerArrayList(ITEMS_DELETE_KEY, deletedItems);
         super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, getString(R.string.onSaveInstanceState));
     }
 }
